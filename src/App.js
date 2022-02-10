@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { cloneDeep } from "lodash";
 import useEventListener from "@use-it/event-listener";
+import Confetti from "react-confetti";
 import { getWord, allWords } from "./words";
 import Keyboard from "./Keyboard";
 import "./App.css";
@@ -20,6 +21,7 @@ function App() {
   const [currentRowIndex, setCurrentRowIndex] = useState(0);
   const [shakeRowIndex, setShakeRowIndex] = useState(-1);
   const [success, setSuccess] = useState(false);
+  const [party, setParty] = useState(false);
   const [letterStates, setLetterStates] = useState({});
 
   const showMessage = (msg, time = 1000) => {
@@ -132,6 +134,7 @@ function App() {
       if (currentRow.every((tile) => tile.state === "CORRECT")) {
         setMessage("Awww yisss!");
         setSuccess(true);
+        setParty(true);
       } else {
         setMessage("");
         if (currentRowIndex >= 5) {
@@ -199,6 +202,15 @@ function App() {
     <>
       <h1>❤️‍🩹 Kind Wordle</h1>
       <p>{message}</p>
+      <Confetti
+        style={{ pointerEvents: "none" }}
+        numberOfPieces={party ? 500 : 0}
+        recycle={false}
+        onConfettiComplete={(confetti) => {
+          setParty(false);
+          confetti.reset();
+        }}
+      />
       <div id="board">
         {board.map((row, index) => {
           return (
