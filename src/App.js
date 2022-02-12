@@ -81,6 +81,7 @@ function App() {
       }
 
       const answerLetters = answer.split("");
+      const tempLetterStates = { ...letterStates };
 
       // First pass: mark correct ones
       currentRow.forEach((tile, i) => {
@@ -88,10 +89,7 @@ function App() {
           tile.state = "CORRECT";
           answerLetters[i] = null;
 
-          setLetterStates((state) => {
-            state[tile.letter] = "CORRECT";
-            return state;
-          });
+          tempLetterStates[tile.letter] = "CORRECT";
         }
       });
 
@@ -101,11 +99,8 @@ function App() {
           tile.state = "PRESENT";
           answerLetters[answerLetters.indexOf(tile.letter)] = null;
 
-          if (!letterStates[tile.letter]) {
-            setLetterStates((state) => {
-              state[tile.letter] = "PRESENT";
-              return state;
-            });
+          if (!tempLetterStates[tile.letter]) {
+            tempLetterStates[tile.letter] = "PRESENT";
           }
         }
       });
@@ -116,13 +111,12 @@ function App() {
           tile.state = "ABSENT";
         }
 
-        if (!letterStates[tile.letter]) {
-          setLetterStates((state) => {
-            state[tile.letter] = "ABSENT";
-            return state;
-          });
+        if (!tempLetterStates[tile.letter]) {
+          tempLetterStates[tile.letter] = "ABSENT";
         }
       });
+
+      setLetterStates(tempLetterStates);
 
       setBoard((prevBoard) => {
         const tempBoard = cloneDeep(prevBoard);
