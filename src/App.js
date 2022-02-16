@@ -165,7 +165,7 @@ function App() {
       }
     } else {
       shake();
-      setMessage("Moar letters needed!");
+      showMessage("Moar letters needed!");
     }
   };
 
