@@ -14,7 +14,7 @@
   flex: 0.5;
 }
 
-button {
+.keyboard_btn {
   font-family: inherit;
   font-weight: bold;
   border: 0;
@@ -35,10 +35,10 @@ button {
   transition: all 0.2s 1.5s;
 }
 
-button:last-of-type {
+.keyboard_btn:last-of-type {
   margin: 0;
 }
 
-button.big {
+.keyboard_btn.big {
   flex: 1.5;
 }

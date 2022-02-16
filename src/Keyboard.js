@@ -14,9 +14,9 @@ function Keyboard({ onKey, letterStates }) {
           {i === 1 && <div className="spacer" />}
           {row.map((key) => (
             <button
-              className={`${key.length > 1 && "big"} ${letterStates[
-                key
-              ]?.toLowerCase()}`}
+              className={`keyboard_btn ${
+                key.length > 1 && "big"
+              } ${letterStates[key]?.toLowerCase()}`}
               onClick={() => onKey(key)}
               key={key}
             >

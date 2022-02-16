@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { cloneDeep } from "lodash";
 import useEventListener from "@use-it/event-listener";
 import Confetti from "react-confetti";
+import StatsModal from "./StatsModal";
 import { getWord, allWords } from "./words";
 import Keyboard from "./Keyboard";
 import "./App.css";
@@ -23,6 +24,10 @@ function App() {
   const [success, setSuccess] = useState(false);
   const [party, setParty] = useState(false);
   const [letterStates, setLetterStates] = useState({});
+
+  const [currentStreak, setCurrentStreak] = useState(0);
+  const [totalGuesses, setTotalGuesses] = useState(0);
+  const [bestStreak, setBestStreak] = useState(0);
 
   const showMessage = (msg, time = 1000) => {
     setMessage(msg);
@@ -129,13 +134,33 @@ function App() {
         setMessage("Awww yisss!");
         setSuccess(true);
         setParty(true);
+
+        localStorage.setItem("totalGuesses", (totalGuesses + 1).toString());
+        setTotalGuesses((guesses) => guesses + 1);
+
+        localStorage.setItem("currentStreak", (currentStreak + 1).toString());
+
+        if (currentStreak + 1 > bestStreak) {
+          localStorage.setItem("bestStreak", (bestStreak + 1).toString());
+          setBestStreak((streak) => streak + 1);
+        }
+
+        setCurrentStreak((streak) => streak + 1);
       } else {
         setMessage("");
         if (currentRowIndex >= 5) {
           setSuccess(true);
           setMessage("Better luck next time!");
+
+          localStorage.setItem("currentStreak", "0");
+          setCurrentStreak(0);
+          localStorage.setItem("totalGuesses", "0");
+          setTotalGuesses(0);
         } else {
           setCurrentRowIndex((count) => count + 1);
+
+          localStorage.setItem("totalGuesses", (totalGuesses + 1).toString());
+          setTotalGuesses((guesses) => guesses + 1);
         }
       }
     } else {
@@ -189,12 +214,22 @@ function App() {
       }
     });
 
+    // Set streak values from local storage
+    setCurrentStreak(parseInt(localStorage.getItem("currentStreak")) || 0);
+    setTotalGuesses(parseInt(localStorage.getItem("totalGuesses")) || 0);
+    setBestStreak(parseInt(localStorage.getItem("bestStreak")) || 0);
+
     return () => window.removeEventListener("resize", onResize);
   }, []);
 
   return (
     <>
       <h1>❤️‍🩹 Kind Wordle</h1>
+      <StatsModal
+        currentStreak={currentStreak}
+        totalGuesses={totalGuesses}
+        bestStreak={bestStreak}
+      />
       <p>{message}</p>
       <Confetti
         style={{ pointerEvents: "none" }}
