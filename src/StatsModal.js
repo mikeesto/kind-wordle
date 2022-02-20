@@ -14,8 +14,12 @@ function StatsModal({ currentStreak, totalGuesses, bestStreak }) {
       <button id="stats_btn" onClick={() => setIsOpen(true)}>
         ⭐ Stats
       </button>
-      <ReactModal isOpen={modalIsOpen} onRequestClose={() => setIsOpen(false)}>
-        <h3>Kind Wordle Stats</h3>
+      <ReactModal
+        isOpen={modalIsOpen}
+        onRequestClose={() => setIsOpen(false)}
+        shouldReturnFocusAfterClose={false}
+      >
+        <h3>Your Stats</h3>
         <p>Current streak: {currentStreak}</p>
         <p>
           Guesses taken: {totalGuesses} / {(currentStreak || 1) * 6}
